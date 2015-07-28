@@ -1,0 +1,13 @@
+[Unit]
+Description="Remove unused images every day at 5am UTC"
+After=docker.service
+
+[Timer]
+OnCalendar=*-*-* 00:05:00
+Unit=reaper.service
+
+[Install]
+WantedBy=local.target
+
+[X-Fleet]
+Global=true
