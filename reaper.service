@@ -1,13 +1,13 @@
 [Unit]
-Description="Remove unused images every day at 5am UTC"
-After=docker.service
+Description="Docker Image Reaper"
 
-[Timer]
-OnCalendar=*-*-* 00:05:00
-Unit=reaper.service
-
-[Install]
-WantedBy=local.target
+[Service]
+User=core
+RemainAfterExit=yes
+ExecStartPre=/usr/bin/mkdir -p /home/core/bin
+ExecStartPre=/usr/bin/wget https://s3-us-west-2.amazonaws.com/test-devops/reaper/reaper.sh -O /home/core/bin/reaper.sh
+ExecStartPre=/usr/bin/chmod 0744 /home/core/bin/reaper.sh
+ExecStart=/home/core/bin/reaper.sh
 
 [X-Fleet]
 Global=true
