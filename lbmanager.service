@@ -1,0 +1,17 @@
+[Unit]
+Description=LbManager
+After=docker.service
+Requires=docker.service
+
+[Service]
+User=core
+TimeoutStartSec=30m
+ExecStartPre=-/usr/bin/docker kill lbmanager
+ExecStartPre=-/usr/bin/docker rm lbmanager
+ExecStartPre=/usr/bin/docker pull test/lbmanager
+ExecStart=/usr/bin/docker run --name lbmanager -e ETCD_HOST=http://172.17.42.1:4001 -e AWS_ACCESS_KEY=xxxx -e AWS_SECRET_KEY=xxx test/lbmanager
+ExecStop=/usr/bin/docker stop lbmanager
+
+[X-Fleet]
+MachineMetadata=vpc=xxxx
+MachineMetadata=service_type=microservice
